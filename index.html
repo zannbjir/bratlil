@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Bratlil Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+
+        body {
+            background: #050505;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 1000px;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 25px;
+        }
+
+        .panel {
+            background: #111;
+            border-radius: 24px;
+            padding: 40px;
+            border: 1px solid #222;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -1.5px;
+            color: #8ACE00;
+        }
+
+        .sub {
+            font-size: 15px;
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #555;
+            margin-bottom: 12px;
+            display: block;
+            font-weight: 700;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 20px;
+            border-radius: 16px;
+            border: 2px solid #222;
+            outline: none;
+            margin-bottom: 25px;
+            background: #000;
+            color: white;
+            font-size: 18px;
+            resize: none;
+            height: 150px;
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus {
+            border-color: #8ACE00;
+            box-shadow: 0 0 15px rgba(138, 206, 0, 0.2);
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 18px;
+            border-radius: 16px;
+            border: none;
+            background: #8ACE00;
+            color: #000;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .generate-btn:hover {
+            background: #a4f500;
+            transform: translateY(-2px);
+        }
+
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+
+        .previewBox {
+            background: #0a0a0a;
+            border: 2px dashed #222;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        #resultImg {
+            max-width: 100%;
+            border-radius: 12px;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .loading { 
+            color: #8ACE00; 
+            font-size: 14px; 
+            display: none;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .actions { 
+            display: none; 
+            gap: 12px; 
+            width: 100%; 
+            margin-top: 20px;
+        }
+
+        .download-btn { 
+            background: #fff; 
+            color: #000; 
+            flex: 1; 
+            height: 55px; 
+            border-radius: 14px; 
+            font-weight: 700; 
+            border: none; 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+
+        .regen-btn { 
+            background: #1a1a1a; 
+            color: #fff; 
+            width: 55px;
+            height: 55px; 
+            border-radius: 14px; 
+            border: 1px solid #333; 
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .download-btn:hover { background: #eee; }
+        .regen-btn:hover { background: #252525; }
+
+        footer {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 20px;
+            color: #444;
+            font-size: 12px;
+            letter-spacing: 1px;
+            border-top: 1px solid #111;
+            margin-top: 10px;
+        }
+
+        footer b { color: #666; }
+
+        @media (max-width: 850px) { 
+            .app { grid-template-columns: 1fr; } 
+            .panel { padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app">
+    <div class="panel">
+        <h1>Bratlil</h1>
+        <div class="sub">Balil Generator Cik 😹</div>
+
+        <label>Enter Text</label>
+        <textarea id="textInput" placeholder="So brat..."></textarea>
+
+        <button class="generate-btn" onclick="generateImage()">Generate Canvas</button>
+    </div>
+
+    <div class="panel previewBox">
+        <div class="loading" id="loadingText">Sabar lagi diproses...</div>
+        <img id="resultImg" crossorigin="anonymous" />
+        
+        <div class="actions" id="actionButtons">
+            <button class="download-btn" onclick="downloadImage()">Save to Gallery</button>
+            <button class="regen-btn" onclick="generateImage()" title="Refresh">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 <b>BRATLIL</b> • Powered by Noku API • <i>Everything is brat.</i>
+    </footer>
+</div>
+
+<script>
+    function generateImage() {
+        const textVal = document.getElementById("textInput").value.trim();
+        if (!textVal) return alert("Ketik sesuatu dulu, coy!");
+
+        const img = document.getElementById("resultImg");
+        const loading = document.getElementById("loadingText");
+        const actions = document.getElementById("actionButtons");
+
+        // UI Feedback
+        loading.style.display = "block";
+        img.style.display = "none";
+        actions.style.display = "none";
+
+        const url = `https://api.noku.top/canvas/bratlil?text=${encodeURIComponent(textVal)}`;
+        img.src = url;
+
+        img.onload = () => {
+            loading.style.display = "none";
+            img.style.display = "block";
+            actions.style.display = "flex";
+        };
+        
+        img.onerror = () => {
+            loading.textContent = "Waduh, API-nya lagi down. Coba lagi Nanti!";
+            loading.style.color = "#ff4444";
+        };
+    }
+
+    async function downloadImage() {
+        const img = document.getElementById("resultImg");
+        if (!img.src) return;
+
+        try {
+            const response = await fetch(img.src);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `balil-belom-coli-😹😹-${Date.now()}.png`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        } catch (e) {
+            alert("Gagal download. Coba klik kanan terus 'Save Image' aja ya!");
+        }
+    }
+</script>
+
+</body>
+</html>
