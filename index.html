@@ -236,7 +236,7 @@
         img.style.display = "none";
         actions.style.display = "none";
 
-        const url = `https://api.noku.top/canvas/bratlil?text=${encodeURIComponent(textVal)}`;
+        const url = `https://api.noku.top/v1/canvas/bratlil?text=${encodeURIComponent(textVal)}`;
         img.src = url;
 
         img.onload = () => {
